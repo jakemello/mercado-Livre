@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="./ImagensProjeto/logoFreedom.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freedom Store</title>
+    <style>
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        header {
+            background-image: linear-gradient(to right, rgb(200, 206, 109), rgb(25, 108, 233));
+            color: #ecf0f1;
+            padding: 20px 0;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px; 
+            flex-wrap: wrap;
+        }
+
+        header img {
+            max-height: 60px; 
+            border-radius: 50%;
+        }
+
+        header h1 {
+            color: #fff;
+            margin: 0;
+            font-size: 2.2em;
+        }
+
+        .containerCadastroConsumidor,.containerVendedor,.containerProdutos {
+            background-color: #fff;
+            padding: 30px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        form input[type="text"],
+        form input[type="password"],
+        form input[type="email"],
+        form input[type="tel"],
+        form input[type="number"],
+        form textarea,
+        form input[type="file"] {
+            width: calc(100% - 22px); 
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        form textarea {
+            resize: vertical; 
+        }
+
+        form input[type="file"] {
+            padding: 5px; 
+        }
+
+        form button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #204977;
+        }
+
+        form button[type="reset"] {
+            background-color: #e74c3c;
+        }
+
+        form button[type="reset"]:hover {
+            background-color: #b86544;
+        }
+
+        .lista-produtos {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px; 
+        }
+
+        .produtos {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .produtos:hover {
+            transform: translateY(-5px);
+        }
+
+        .produtos img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+        }
+
+        .detalhes-produtos h4 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+
+        .detalhes-produtos p {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .editar-produtos {
+            margin-top: 20px;
+            width: 100%; 
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .editar-produtos button {
+            padding: 10px 18px;
+            font-size: 0.9em;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .editar-produtos .editar {
+            background-color: #3275da; 
+            color: white;
+        }
+
+        .editar-produtos .editar:hover {
+            background-color: #082953;
+        }
+
+        .editar-produtos .deletar {
+            background-color: #247028;
+            color: white;
+        }
+
+        .editar-produtos .deletar:hover {
+            background-color: #aa665f;
+        }
+
+        footer{
+            background-image: linear-gradient(to right, rgb(200, 206, 109), rgb(25, 108, 233));
+            text-align: center;
+            padding: 3px;
+            margin-top: 40px;
+            color: #0c0d0e;
+            font-size: 1.0em;
+            font-weight: bold;
+        }
+
+        .copy {
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }.containerCadastroConsumidor,.containerVendedor,.containerProdutos {
+                margin: 15px;
+                padding: 20px;
+            }
+            .lista-produtos {
+                grid-template-columns: 1fr; 
+            }
+        }
+
+        @media (max-width: 480px) {
+            header img {
+                max-height: 45px;
+            }
+            header h1 {
+                font-size: 1.5em;
+            }
+            form input, form textarea, form button {
+                font-size: 0.95em;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="./ImagensProjeto/freedomImage.png" alt="">
+        <h1>Sistema de Mercado Livre</h1>
+    </header>
+    <div>
+    <section id="cadastroConsumidor" class="containerCadastroConsumidor">
+        <h2>1. Cadastro de Consumidor</h2>
+        <form action="#" method="post">
+            <label for="nome-consumidor">Digite seu Nome:</label>
+            <input type="text" name="nomeConsumidor" id="nome-consumidor" required>
+
+            <label for="cpf-consumidor">Digite seu CPF:</label>
+            <input type="text" name="cpfConsumidor" id="cpf-consumidor" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="Ex: 000.000.000-00" required>
+
+            <label for="endereco-consumidor">Digite seu Endereço:</label>
+            <input type="text" name="enderecoConsumidor" id="endereco-consumidor" required>
+
+            <label for="telefone-consumidor">Digite seu telefone:</label>
+            <input type="tel" name="telefoneCoonsumidor" id="telefone-consumidor" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Ex: (XX) XXXX-XXXX" required>
+
+            <label for="email-consumidor">Digite seu E-Mail:</label>
+            <input type="email" name="emailConsumidor" id="email-consumidor" required>
+
+            <label for="senha-consumidor">Crie uma Senha:</label>
+            <input type="password" name="senhaConsumidor" id="senha-consumidor" required>
+
+            <button type="submit">Cadastrar Consumidor</button>
+        </form>
+    </section>
+    </div>
+    <div>
+        <section id="cadastro-vendedor" class="containerVendedor">
+            <h2>2. Cadastro de Vendedor</h2>
+            <form action="#" method="post">
+                <label for="nome-vendedor">Digite se Nome:</label>
+                <input type="text" name="nomeVendedor" id="nome-vendedor" required>
+
+                <label for="cpf-vendedor">Digite seu CPF:</label>
+                <input type="text" name="cpfVendedor" id="cpf-vendedor" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="Ex: 000.000.000-00" required>
+
+                <label for="endereco-vendedor">Digite seu Endereço:</label>
+                <input type="text" name="enderecoVendedor" id="endereco-vendedor" required>
+
+                <label for="telefone-vendedor">Digite seu Telefone:</label>
+                <input type="tel" name="telefoneVendedor" id="telefone-vendedor" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Ex: (XX) XXXX-XXXX" required>
+
+                <label for="email-vendedor">Digite seu E-mail:</label>
+                <input type="email" name="emailVendedor" id="email-vendedor" required>
+
+                <label for="senha-vendedor">Crie sua Senha:</label>
+                <input type="password" name="senhaVendedor" id="senha-vendedor" required>
+
+                <h3>Dados para Depósito do Pagamento:</h3>
+                <label for="banco-vendedor">Digite o nome do Banco:</label>
+                <input type="text" name="bancoVendedor" id="banco-vendedor" required>
+
+                <label for="agencia-vendedor">Agência:</label>
+                <input type="text" name="agenciaVendedor" id="agencia-vendedor" required>
+
+                <label for="conta-vendedor">Conta:</label>
+                <input type="text" name="contaVendedor" id="conta-vendedor" required>
+
+                <button type="submit">Cadastrar Vendedor</button>
+            </form>
+        </section>
+    </div>
+    <div>
+        <section id="cadastro-produtos" class="containerProdutos">
+            <h2>3. Cadastro de Produtos</h2>
+            <h3>Incluir/Alterar Produtos</h3>
+            <form action="#" method="post">
+                <label for="foto-produto">Foto do Produto</label>
+                <input type="file" name="fotoProduto" id="foto-produto" accept="image/*">
+
+                <label for="nome-produto">Nome do Produto</label>
+                <input type="text" name="nomeProduto" id="nome-produto" required>
+
+                <label for="descricao-produto">Descrição do Produto</label>
+                <textarea name="descricaoProduto" id="descricao-produto" rows="4" required></textarea>
+
+                <label for="preco-produto">Preço</label>
+                <input type="number" name="precoProduto" id="preco-produto" step="0.01" min="0" placeholder="Ex: 99.99" required>
+
+                <label for="prazo-entrega">Prazo de entrega (dias):</label>
+                <input type="number" name="prazoEntrega" id="prazo-entrega" min="0" required>
+
+                <button type="submit">Salvar Produto</button>
+                <button type="reset">Limpar</button>
+            </form>
+
+            <h3>4. Produtos Cadastrados</h3>
+        <div class="lista-produtos">
+        <div class="produtos">
+        <img src="./ImagensProjeto/A55.png" alt="Imagem do Smartphone Samsung Galaxy A55 5G">
+        <section class="detalhes-produtos">
+            <h4>Smartphone Samsung Galaxy A55 5G</h4>
+            <p>Descrição: Aparelho de última geração, 256GB Rosa 5G 8GB RAM Tela 6,6" Câm. Traseira 50+12+5MP Frontal 32MP.</p>
+            <p>Preço: R$ 1.699,05 À vista no pix | Prazo de Entrega: 5 dias</p>
+        </section>
+        <section class="editar-produtos">
+            <button class="editar">Alterar</button>
+            <button class="deletar">Excluir</button>
+        </section>
+        </div>
+        <div class="produtos">
+        <img src="./ImagensProjeto/foneJBL.png" alt="Imagem do Fone de Ouvido Bluetooth">
+        <section class="detalhes-produtos">
+            <h4>Fone de Ouvido Bluetooth JBL Free - Intra-auricular com Microfone Branco</h4>
+            <p>Descrição: Sem fio, com microfone e cancelamento de ruído.</p>
+            <p>Preço: R$ 550,00 À vista no pix | Prazo de Entrega: 3 dias</p>
+        </section>
+        <section class="editar-produtos">
+            <button class="editar">Alterar</button>
+            <button class="deletar">Excluir</button>
+        </section>
+        </div>
+        <div class="produtos">
+        <img src="./ImagensProjeto/TVLG50.png" alt="Imagem da Smart TV 4K">
+        <section class="detalhes-produtos">
+            <h4>Smart TV LG 4K 50 polegadas</h4>
+            <p>Descrição: 4K Ultra HD UT80 Processador a5 Ger7 AI, Alexa, Wi-Fi, Bluetooth, Chromecast Integrado, Otimizador de Jogos e webOS 24 e Controle Smart Magic.</p>
+            <p>Preço: R$ 2.100,00 À vista no pix | Prazo de Entrega: 7 dias</p>
+        </section>
+        <section class="editar-produtos">
+            <button class="editar">Alterar</button>
+            <button class="deletar">Excluir</button>
+        </section>
+        </div>
+        <div class="produtos">
+        <img src="./ImagensProjeto/Odyssey2.png" alt="Imagem do Notebook Gamer">
+        <section class="detalhes-produtos">
+            <h4>Notebook Gamer: Odyssey 2</h4>
+            <p>Descrição: O Odyssey 2 vem com a nona geração de processadores Intel, placa de vídeo GTX 1650 ou RTX 2060, tela de até 144 Hz com GSYNC e um visual caprichado com construção de metal e visual sóbrio e agressivo.</p>
+            <p>Preço: R$ 5.500,00 À vista no pix | Prazo de Entrega: 10 dias</p>
+        </section>
+        <section class="editar-produtos">
+            <button class="editar">Alterar</button>
+            <button class="deletar">Excluir</button>
+        </section>
+        </div>
+        <div class="produtos">
+        <img src="./ImagensProjeto/Cannon.png" alt="Imagem da Câmera Fotográfica">
+        <section class="detalhes-produtos">
+            <h4>Câmera Fotográfica Câmera Canon SL3 DSLR</h4>
+            <p>Descrição: Ideal para profissionais, alta qualidade de imagem com 24.1MP, 3", Gravação em Full HD - EF-S 18-55MM, Compacto.</p>
+            <p>Preço: R$ 5.670,97 À vista no pix | Prazo de Entrega: 6 dias</p>
+        </section>
+        <section class="editar-produtos">
+            <button class="editar">Alterar</button>
+            <button class="deletar">Excluir</button>
+        </section>
+        </div>
+        <div class="produtos">
+        <img src="./ImagensProjeto/PS5.png" alt="Imagem da Câmera Fotográfica">
+        <section class="detalhes-produtos">
+            <h4>Console PlayStation 5 Slim Digital Edition Branco</h4>
+            <p>Descrição: Diversão garantida, SSD 1TB + Returnal e Ratchet e Clank + Controle Sem Fio Dualsense Branco.</p>
+            <p>Preço: R$ 3.270,97 À vista no pix | Prazo de Entrega: 4 dias</p>
+        </section>
+        <section class="editar-produtos">
+            <button class="editar">Alterar</button>
+            <button class="deletar">Excluir</button>
+        </section>
+        </div>
+        </div>
+        </section>
+    </div>
+    <footer>
+        <p>&copy; 2025 Freedom Store. Todos os direitos reservados</p>
+        <p class="copy">Desenvolvido por <b>Jakeline Melo</b> para fins didáticos.</p>
+    </footer>
+</body>
+</html>
