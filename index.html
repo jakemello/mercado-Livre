@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Freedom Store</title>
     <style>
-
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -14,6 +13,9 @@
             background-color: #fff;
             color: #333;
             line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         h1, h2, h3, h4 {
@@ -29,12 +31,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px; 
+            gap: 15px;
             flex-wrap: wrap;
         }
 
         header img {
-            max-height: 60px; 
+            max-height: 60px;
             border-radius: 50%;
         }
 
@@ -44,13 +46,35 @@
             font-size: 2.2em;
         }
 
-        .containerCadastroConsumidor,.containerVendedor,.containerProdutos {
+        /* NEW: Container for all three forms to be side-by-side */
+        .container-all-forms {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+            gap: 20px; /* Space between the forms */
+            max-width: 1400px; /* Increased max-width to accommodate three forms */
+            margin: 20px auto; /* Center the grid container */
+            padding: 0 15px; /* Padding for smaller screens */
+            align-items: start; /* Align forms to the top of their grid cells */
+        }
+
+        .containerCadastroConsumidor,
+        .containerVendedor,
+        .containerProdutosForm { /* Renamed for clarity, it's the product registration form */
             background-color: #fff;
             padding: 30px;
-            margin: 20px auto;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
+        }
+
+        /* Styles for the product LIST, which is below the forms */
+        .containerProdutosLista { /* New class for the product list section */
+            max-width: 1200px; /* Adjusted max-width for the product list */
+            margin: 20px auto; /* Center the product list */
+            padding: 30px;
+            background-color: #fff; /* Ensure it also has a background */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            flex-grow: 1;
         }
 
         form label {
@@ -67,21 +91,21 @@
         form input[type="number"],
         form textarea,
         form input[type="file"] {
-            width: calc(100% - 22px); 
+            width: calc(100% - 22px);
             padding: 12px;
             margin-bottom: 20px;
-            border: 1px solid #ccc;
+            border: 1px solid #55976b;
             border-radius: 6px;
             font-size: 1em;
             box-sizing: border-box;
         }
 
         form textarea {
-            resize: vertical; 
+            resize: vertical;
         }
 
         form input[type="file"] {
-            padding: 5px; 
+            padding: 5px;
         }
 
         form button {
@@ -112,22 +136,40 @@
             margin-top: 40px;
             padding-top: 30px;
             border-top: 1px solid #eee;
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px; 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjusted minmax for 3 columns */
+            gap: 25px;
         }
 
         .produtos {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            border: 3px solid transparent;
+            border-image: linear-gradient(rgb(200, 206, 109), rgb(25, 108, 233)) 1;
+            border-image-slice: 5;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 10px 2px 8px rgba(90, 156, 201, 0.05); /* Fixed typo: 10 2px -> 10px 2px */
+            animation: gradientAngle 4s linear infinite;
             transition: transform 0.2s ease;
+        }
+        @keyframes gradientAngle {
+            0% {
+                border-image: linear-gradient(0deg, rgb(200, 206, 109), rgb(25, 108, 233)) 1;
+            }
+            25% {
+                border-image: linear-gradient(90deg, rgb(200, 206, 109), rgb(25, 108, 233)) 1;
+            }
+            50% {
+                border-image: linear-gradient(180deg, rgb(200, 206, 109), rgb(25, 108, 233)) 1;
+            }
+            75% {
+                border-image: linear-gradient(270deg, rgb(200, 206, 109), rgb(25, 108, 233)) 1;
+            }
+            100% {
+                border-image: linear-gradient(360deg, rgb(200, 206, 109), rgb(25, 108, 233)) 1;
+            }
         }
 
         .produtos:hover {
@@ -156,7 +198,7 @@
 
         .editar-produtos {
             margin-top: 20px;
-            width: 100%; 
+            width: 100%;
             display: flex;
             justify-content: center;
             gap: 10px;
@@ -171,8 +213,9 @@
         }
 
         .editar-produtos .editar {
-            background-color: #3275da; 
+            background-color: #3275da;
             color: white;
+            border: none;
         }
 
         .editar-produtos .editar:hover {
@@ -182,6 +225,7 @@
         .editar-produtos .deletar {
             background-color: #247028;
             color: white;
+            border: none;
         }
 
         .editar-produtos .deletar:hover {
@@ -196,21 +240,57 @@
             color: #0c0d0e;
             font-size: 1.0em;
             font-weight: bold;
+            flex-shrink: 0;
         }
 
         .copy {
             font-size: 0.9em;
         }
 
+        /* --- MEDIA QUERIES --- */
+
+        /* For 3 columns:
+           - Below 1400px, forms will start to shrink.
+           - Below 1200px, they will likely still be side-by-side but smaller.
+           - We need a breakpoint where they go from 3 to 2 columns.
+        */
+        @media (max-width: 1200px) {
+            .container-all-forms {
+                grid-template-columns: 1fr 1fr; /* Two columns */
+                max-width: 900px; /* Adjust max-width for two forms */
+            }
+            .containerProdutosForm {
+                grid-column: 1 / -1; /* Make the product form span both columns */
+            }
+            .containerProdutosLista {
+                 max-width: 900px;
+            }
+        }
+
+        /* For 2 columns:
+           - Below 900px, they will shrink further.
+           - We need a breakpoint where they go from 2 to 1 column.
+        */
         @media (max-width: 768px) {
             header h1 {
                 font-size: 1.8em;
-            }.containerCadastroConsumidor,.containerVendedor,.containerProdutos {
-                margin: 15px;
+            }
+            .container-all-forms {
+                grid-template-columns: 1fr; /* Single column */
+                gap: 15px;
+                max-width: 500px; /* Narrower max-width for single column */
+                padding: 0 10px;
+            }
+            .containerCadastroConsumidor,
+            .containerVendedor,
+            .containerProdutosForm,
+            .containerProdutosLista {
+                margin: 15px auto; /* Adjust margin for single column stacking */
                 padding: 20px;
+                max-width: 100%; /* Allow full width within the new max-width of container-all-forms */
             }
             .lista-produtos {
-                grid-template-columns: 1fr; 
+                grid-template-columns: 1fr;
             }
         }
 
@@ -233,33 +313,33 @@
         <img src="./ImagensProjeto/freedomImage.png" alt="">
         <h1>Sistema de Mercado Livre</h1>
     </header>
-    <div>
-    <section id="cadastroConsumidor" class="containerCadastroConsumidor">
-        <h2>1. Cadastro de Consumidor</h2>
-        <form action="#" method="post">
-            <label for="nome-consumidor">Digite seu Nome:</label>
-            <input type="text" name="nomeConsumidor" id="nome-consumidor" required>
 
-            <label for="cpf-consumidor">Digite seu CPF:</label>
-            <input type="text" name="cpfConsumidor" id="cpf-consumidor" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="Ex: 000.000.000-00" required>
+    <div class="container-all-forms">
+        <section id="cadastroConsumidor" class="containerCadastroConsumidor">
+            <h2>1. Cadastro de Consumidor</h2>
+            <form action="#" method="post">
+                <label for="nome-consumidor">Digite seu Nome:</label>
+                <input type="text" name="nomeConsumidor" id="nome-consumidor" required>
 
-            <label for="endereco-consumidor">Digite seu Endereço:</label>
-            <input type="text" name="enderecoConsumidor" id="endereco-consumidor" required>
+                <label for="cpf-consumidor">Digite seu CPF:</label>
+                <input type="text" name="cpfConsumidor" id="cpf-consumidor" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="Ex: 000.000.000-00" maxlength="14" required>
 
-            <label for="telefone-consumidor">Digite seu telefone:</label>
-            <input type="tel" name="telefoneCoonsumidor" id="telefone-consumidor" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Ex: (XX) XXXX-XXXX" required>
+                <label for="endereco-consumidor">Digite seu Endereço:</label>
+                <input type="text" name="enderecoConsumidor" id="endereco-consumidor" required>
 
-            <label for="email-consumidor">Digite seu E-Mail:</label>
-            <input type="email" name="emailConsumidor" id="email-consumidor" required>
+                <label for="telefone-consumidor">Digite seu telefone:</label>
+                <input type="tel" name="telefoneCoonsumidor" id="telefone-consumidor" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Ex: (XX) XXXX-XXXX" maxlength="14" required>
 
-            <label for="senha-consumidor">Crie uma Senha:</label>
-            <input type="password" name="senhaConsumidor" id="senha-consumidor" required>
+                <label for="email-consumidor">Digite seu E-Mail:</label>
+                <input type="email" name="emailConsumidor" id="email-consumidor" required>
 
-            <button type="submit">Cadastrar Consumidor</button>
-        </form>
-    </section>
-    </div>
-    <div>
+                <label for="senha-consumidor">Crie uma Senha:</label>
+                <input type="password" name="senhaConsumidor" id="senha-consumidor" required>
+
+                <button type="submit">Cadastrar Consumidor</button>
+            </form>
+        </section>
+
         <section id="cadastro-vendedor" class="containerVendedor">
             <h2>2. Cadastro de Vendedor</h2>
             <form action="#" method="post">
@@ -267,13 +347,13 @@
                 <input type="text" name="nomeVendedor" id="nome-vendedor" required>
 
                 <label for="cpf-vendedor">Digite seu CPF:</label>
-                <input type="text" name="cpfVendedor" id="cpf-vendedor" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="Ex: 000.000.000-00" required>
+                <input type="text" name="cpfVendedor" id="cpf-vendedor" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="Ex: 000.000.000-00" maxlength="14" required>
 
                 <label for="endereco-vendedor">Digite seu Endereço:</label>
                 <input type="text" name="enderecoVendedor" id="endereco-vendedor" required>
 
                 <label for="telefone-vendedor">Digite seu Telefone:</label>
-                <input type="tel" name="telefoneVendedor" id="telefone-vendedor" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Ex: (XX) XXXX-XXXX" required>
+                <input type="tel" name="telefoneVendedor" id="telefone-vendedor" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Ex: (XX) XXXX-XXXX" maxlength="14" required>
 
                 <label for="email-vendedor">Digite seu E-mail:</label>
                 <input type="email" name="emailVendedor" id="email-vendedor" required>
@@ -294,11 +374,9 @@
                 <button type="submit">Cadastrar Vendedor</button>
             </form>
         </section>
-    </div>
-    <div>
-        <section id="cadastro-produtos" class="containerProdutos">
+
+        <section id="cadastro-produtos" class="containerProdutosForm">
             <h2>3. Cadastro de Produtos</h2>
-            <h3>Incluir/Alterar Produtos</h3>
             <form action="#" method="post">
                 <label for="foto-produto">Foto do Produto</label>
                 <input type="file" name="fotoProduto" id="foto-produto" accept="image/*">
@@ -315,87 +393,90 @@
                 <label for="prazo-entrega">Prazo de entrega (dias):</label>
                 <input type="number" name="prazoEntrega" id="prazo-entrega" min="0" required>
 
-                <button type="submit">Salvar Produto</button>
+                <button type="submit">Cadastrar Produto</button>
                 <button type="reset">Limpar</button>
             </form>
-
-            <h3>4. Produtos Cadastrados</h3>
-        <div class="lista-produtos">
-        <div class="produtos">
-        <img src="./ImagensProjeto/A55.png" alt="Imagem do Smartphone Samsung Galaxy A55 5G">
-        <section class="detalhes-produtos">
-            <h4>Smartphone Samsung Galaxy A55 5G</h4>
-            <p>Descrição: Aparelho de última geração, 256GB Rosa 5G 8GB RAM Tela 6,6" Câm. Traseira 50+12+5MP Frontal 32MP.</p>
-            <p>Preço: R$ 1.699,05 À vista no pix | Prazo de Entrega: 5 dias</p>
-        </section>
-        <section class="editar-produtos">
-            <button class="editar">Alterar</button>
-            <button class="deletar">Excluir</button>
-        </section>
-        </div>
-        <div class="produtos">
-        <img src="./ImagensProjeto/foneJBL.png" alt="Imagem do Fone de Ouvido Bluetooth">
-        <section class="detalhes-produtos">
-            <h4>Fone de Ouvido Bluetooth JBL Free - Intra-auricular com Microfone Branco</h4>
-            <p>Descrição: Sem fio, com microfone e cancelamento de ruído.</p>
-            <p>Preço: R$ 550,00 À vista no pix | Prazo de Entrega: 3 dias</p>
-        </section>
-        <section class="editar-produtos">
-            <button class="editar">Alterar</button>
-            <button class="deletar">Excluir</button>
-        </section>
-        </div>
-        <div class="produtos">
-        <img src="./ImagensProjeto/TVLG50.png" alt="Imagem da Smart TV 4K">
-        <section class="detalhes-produtos">
-            <h4>Smart TV LG 4K 50 polegadas</h4>
-            <p>Descrição: 4K Ultra HD UT80 Processador a5 Ger7 AI, Alexa, Wi-Fi, Bluetooth, Chromecast Integrado, Otimizador de Jogos e webOS 24 e Controle Smart Magic.</p>
-            <p>Preço: R$ 2.100,00 À vista no pix | Prazo de Entrega: 7 dias</p>
-        </section>
-        <section class="editar-produtos">
-            <button class="editar">Alterar</button>
-            <button class="deletar">Excluir</button>
-        </section>
-        </div>
-        <div class="produtos">
-        <img src="./ImagensProjeto/Odyssey2.png" alt="Imagem do Notebook Gamer">
-        <section class="detalhes-produtos">
-            <h4>Notebook Gamer: Odyssey 2</h4>
-            <p>Descrição: O Odyssey 2 vem com a nona geração de processadores Intel, placa de vídeo GTX 1650 ou RTX 2060, tela de até 144 Hz com GSYNC e um visual caprichado com construção de metal e visual sóbrio e agressivo.</p>
-            <p>Preço: R$ 5.500,00 À vista no pix | Prazo de Entrega: 10 dias</p>
-        </section>
-        <section class="editar-produtos">
-            <button class="editar">Alterar</button>
-            <button class="deletar">Excluir</button>
-        </section>
-        </div>
-        <div class="produtos">
-        <img src="./ImagensProjeto/Cannon.png" alt="Imagem da Câmera Fotográfica">
-        <section class="detalhes-produtos">
-            <h4>Câmera Fotográfica Câmera Canon SL3 DSLR</h4>
-            <p>Descrição: Ideal para profissionais, alta qualidade de imagem com 24.1MP, 3", Gravação em Full HD - EF-S 18-55MM, Compacto.</p>
-            <p>Preço: R$ 5.670,97 À vista no pix | Prazo de Entrega: 6 dias</p>
-        </section>
-        <section class="editar-produtos">
-            <button class="editar">Alterar</button>
-            <button class="deletar">Excluir</button>
-        </section>
-        </div>
-        <div class="produtos">
-        <img src="./ImagensProjeto/PS5.png" alt="Imagem da Câmera Fotográfica">
-        <section class="detalhes-produtos">
-            <h4>Console PlayStation 5 Slim Digital Edition Branco</h4>
-            <p>Descrição: Diversão garantida, SSD 1TB + Returnal e Ratchet e Clank + Controle Sem Fio Dualsense Branco.</p>
-            <p>Preço: R$ 3.270,97 À vista no pix | Prazo de Entrega: 4 dias</p>
-        </section>
-        <section class="editar-produtos">
-            <button class="editar">Alterar</button>
-            <button class="deletar">Excluir</button>
-        </section>
-        </div>
-        </div>
         </section>
     </div>
+
+    <section class="containerProdutosLista">
+        <h3>4. Produtos Cadastrados</h3>
+        <div class="lista-produtos">
+            <div class="produtos">
+                <img src="./ImagensProjeto/A55.png" alt="Imagem do Smartphone Samsung Galaxy A55 5G">
+                <section class="detalhes-produtos">
+                    <h4>Smartphone Samsung Galaxy A55 5G</h4>
+                    <p>Descrição: Aparelho de última geração, 256GB Rosa 5G 8GB RAM Tela 6,6" Câm. Traseira 50+12+5MP Frontal 32MP.</p>
+                    <p>Preço: R$ 1.699,05 À vista no pix | Prazo de Entrega: 5 dias</p>
+                </section>
+                <section class="editar-produtos">
+                    <button class="editar">Alterar Produto</button>
+                    <button class="deletar">Excluir</button>
+                </section>
+            </div>
+            <div class="produtos">
+                <img src="./ImagensProjeto/foneJBL.png" alt="Imagem do Fone de Ouvido Bluetooth">
+                <section class="detalhes-produtos">
+                    <h4>Fone de Ouvido Bluetooth JBL Free - Intra-auricular com Microfone Branco</h4>
+                    <p>Descrição: Sem fio, com microfone e cancelamento de ruído.</p>
+                    <p>Preço: R$ 550,00 À vista no pix | Prazo de Entrega: 3 dias</p>
+                </section>
+                <section class="editar-produtos">
+                    <button class="editar">Alterar Produto</button>
+                    <button class="deletar">Excluir</button>
+                </section>
+            </div>
+            <div class="produtos">
+                <img src="./ImagensProjeto/TVLG50.png" alt="Imagem da Smart TV 4K">
+                <section class="detalhes-produtos">
+                    <h4>Smart TV LG 4K 50 polegadas</h4>
+                    <p>Descrição: 4K Ultra HD UT80 Processador a5 Ger7 AI, Alexa, Wi-Fi, Bluetooth, Chromecast Integrado, Otimizador de Jogos e webOS 24 e Controle Smart Magic.</p>
+                    <p>Preço: R$ 2.100,00 À vista no pix | Prazo de Entrega: 7 dias</p>
+                </section>
+                <section class="editar-produtos">
+                    <button class="editar">Alterar Produto</button>
+                    <button class="deletar">Excluir</button>
+                </section>
+            </div>
+            <div class="produtos">
+                <img src="./ImagensProjeto/Odyssey2.png" alt="Imagem do Notebook Gamer">
+                <section class="detalhes-produtos">
+                    <h4>Notebook Gamer: Odyssey 2</h4>
+                    <p>Descrição: O Odyssey 2 vem com a nona geração de processadores Intel, placa de vídeo GTX 1650 ou RTX 2060, tela de até 144 Hz com GSYNC e um visual caprichado com construção de metal e visual sóbrio e agressivo.</p>
+                    <p>Preço: R$ 5.500,00 À vista no pix | Prazo de Entrega: 10 dias</p>
+                </section>
+                <section class="editar-produtos">
+                    <button class="editar">Alterar Produto</button>
+                    <button class="deletar">Excluir</button>
+                </section>
+            </div>
+            <div class="produtos">
+                <img src="./ImagensProjeto/Cannon.png" alt="Imagem da Câmera Fotográfica">
+                <section class="detalhes-produtos">
+                    <h4>Câmera Fotográfica Câmera Canon SL3 DSLR</h4>
+                    <p>Descrição: Ideal para profissionais, alta qualidade de imagem com 24.1MP, 3", Gravação em Full HD - EF-S 18-55MM, Compacto.</p>
+                    <p>Preço: R$ 5.670,97 À vista no pix | Prazo de Entrega: 6 dias</p>
+                </section>
+                <section class="editar-produtos">
+                    <button class="editar">Alterar Produto</button>
+                    <button class="deletar">Excluir</button>
+                </section>
+            </div>
+            <div class="produtos">
+                <img src="./ImagensProjeto/PS5.png" alt="Imagem da Câmera Fotográfica">
+                <section class="detalhes-produtos">
+                    <h4>Console PlayStation 5 Slim Digital Edition Branco</h4>
+                    <p>Descrição: Diversão garantida, SSD 1TB + Returnal e Ratchet e Clank + Controle Sem Fio Dualsense Branco.</p>
+                    <p>Preço: R$ 3.270,97 À vista no pix | Prazo de Entrega: 4 dias</p>
+                </section>
+                <section class="editar-produtos">
+                    <button class="editar">Alterar Produto</button>
+                    <button class="deletar">Excluir</button>
+                </section>
+            </div>
+        </div>
+    </section>
+
     <footer>
         <p>&copy; 2025 Freedom Store. Todos os direitos reservados</p>
         <p class="copy">Desenvolvido por <b>Jakeline Melo</b> para fins didáticos.</p>
