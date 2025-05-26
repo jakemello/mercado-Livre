@@ -46,32 +46,30 @@
             font-size: 2.2em;
         }
 
-        /* NEW: Container for all three forms to be side-by-side */
         .container-all-forms {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* Three equal columns */
-            gap: 20px; /* Space between the forms */
-            max-width: 1400px; /* Increased max-width to accommodate three forms */
-            margin: 20px auto; /* Center the grid container */
-            padding: 0 15px; /* Padding for smaller screens */
-            align-items: start; /* Align forms to the top of their grid cells */
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 15px;
+            align-items: start;
         }
 
         .containerCadastroConsumidor,
         .containerVendedor,
-        .containerProdutosForm { /* Renamed for clarity, it's the product registration form */
+        .containerProdutosForm {
             background-color: #fff;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Styles for the product LIST, which is below the forms */
-        .containerProdutosLista { /* New class for the product list section */
-            max-width: 1200px; /* Adjusted max-width for the product list */
-            margin: 20px auto; /* Center the product list */
+        .containerProdutosLista {
+            max-width: 1200px;
+            margin: 20px auto;
             padding: 30px;
-            background-color: #fff; /* Ensure it also has a background */
+            background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             flex-grow: 1;
@@ -137,7 +135,7 @@
             padding-top: 30px;
             border-top: 1px solid #eee;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjusted minmax for 3 columns */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
         }
 
@@ -150,7 +148,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            box-shadow: 10px 2px 8px rgba(90, 156, 201, 0.05); /* Fixed typo: 10 2px -> 10px 2px */
+            box-shadow: 10px 2px 8px rgba(90, 156, 201, 0.05);
             animation: gradientAngle 4s linear infinite;
             transition: transform 0.2s ease;
         }
@@ -247,47 +245,36 @@
             font-size: 0.9em;
         }
 
-        /* --- MEDIA QUERIES --- */
-
-        /* For 3 columns:
-           - Below 1400px, forms will start to shrink.
-           - Below 1200px, they will likely still be side-by-side but smaller.
-           - We need a breakpoint where they go from 3 to 2 columns.
-        */
         @media (max-width: 1200px) {
             .container-all-forms {
-                grid-template-columns: 1fr 1fr; /* Two columns */
-                max-width: 900px; /* Adjust max-width for two forms */
+                grid-template-columns: 1fr 1fr;
+                max-width: 900px;
             }
             .containerProdutosForm {
-                grid-column: 1 / -1; /* Make the product form span both columns */
+                grid-column: 1 / -1;
             }
             .containerProdutosLista {
                  max-width: 900px;
             }
         }
 
-        /* For 2 columns:
-           - Below 900px, they will shrink further.
-           - We need a breakpoint where they go from 2 to 1 column.
-        */
         @media (max-width: 768px) {
             header h1 {
                 font-size: 1.8em;
             }
             .container-all-forms {
-                grid-template-columns: 1fr; /* Single column */
+                grid-template-columns: 1fr;
                 gap: 15px;
-                max-width: 500px; /* Narrower max-width for single column */
+                max-width: 500px;
                 padding: 0 10px;
             }
             .containerCadastroConsumidor,
             .containerVendedor,
             .containerProdutosForm,
             .containerProdutosLista {
-                margin: 15px auto; /* Adjust margin for single column stacking */
+                margin: 15px auto;
                 padding: 20px;
-                max-width: 100%; /* Allow full width within the new max-width of container-all-forms */
+                max-width: 100%;
             }
             .lista-produtos {
                 grid-template-columns: 1fr;
